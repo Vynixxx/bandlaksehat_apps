@@ -5,7 +5,7 @@ import 'package:bandlaksehat_apps/dashboard.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bandlaksehat_apps/register.dart'; // Tambahkan import ini
+import 'package:bandlaksehat_apps/register.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

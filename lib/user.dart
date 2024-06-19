@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:bandlaksehat_apps/rujukan.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+class HomePage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomePage(),
-    );
-  }
+  _HomePageState createState() => _HomePageState();
 }
 
-class HomePage extends StatelessWidget {
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => rujukanForm()), 
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,20 +52,24 @@ class HomePage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home,color: Colors.blue),
+            icon: Icon(Icons.home, color: _selectedIndex == 0 ? Colors.blue : Colors.black),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.insert_drive_file,color: Colors.blue),
+            icon: Icon(Icons.insert_drive_file, color: _selectedIndex == 1 ? Colors.blue : Colors.black),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person,color: Colors.blue),
+            icon: Icon(Icons.person, color: _selectedIndex == 2 ? Colors.blue : Colors.black),
             label: '',
           ),
         ],
+        selectedLabelStyle: TextStyle(color: Colors.blue), 
+        unselectedLabelStyle: TextStyle(color: Colors.black),
       ),
     );
   }
@@ -124,26 +137,22 @@ class WeatherInfo extends StatelessWidget {
           SizedBox(height: 20),
           Text(
             'Suhu :',
-            style: TextStyle(fontSize: 20,color: Colors.blue,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
           Text(
             'Kelembapan :',
-            style: TextStyle(fontSize: 20,color: Colors.blue,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
           Text(
             'UV :',
-            style: TextStyle(fontSize: 20,color: Colors.blue,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
           Text(
             'Jarak Pandang :',
-            style: TextStyle(fontSize: 20,color: Colors.blue,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
           ),
         ],
       ),
