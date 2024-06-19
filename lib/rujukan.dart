@@ -16,8 +16,8 @@ class _rujukanFormState extends State<rujukanForm> {
   String? _selectedKecamatan;
   String? _selectedKelurahan;
 
-  final List<String> _kecamatanList = ['Kecamatan 1', 'Kecamatan 2', 'Kecamatan 3'];
-  final List<String> _kelurahanList = ['Kelurahan 1', 'Kelurahan 2', 'Kelurahan 3'];
+  final List<String> _kecamatanList = ['Kecamatan Bandar Laksamana'];
+  final List<String> _kelurahanList = ['Kelurahan Parit 1 Api-Api', 'Temiang', 'Api-Api', 'Tenggayun', 'Sepahat', ];
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +62,12 @@ class _rujukanFormState extends State<rujukanForm> {
               TextFormField(
                 controller: _ktpController,
                 decoration: InputDecoration(
-                  labelText: 'No. KTP*',
+                  labelText: 'NIK*',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'No. KTP tidak boleh kosong';
+                    return 'NIK tidak boleh kosong';
                   }
                   return null;
                 },
