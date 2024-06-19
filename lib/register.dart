@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:bandlaksehat_apps/login_screen.dart'; 
 
 class RegisterForm extends StatefulWidget {
   @override
@@ -11,9 +10,13 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _nikController = TextEditingController(); 
+  String? _selectedGender; 
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   final _formKey = GlobalKey<FormState>();
+
+  final List<String> _genderList = ['Laki-laki', 'Perempuan']; 
 
   void _register() {
     if (_formKey.currentState!.validate()) {
@@ -108,6 +111,26 @@ class _RegisterFormState extends State<RegisterForm> {
                 Container(
                   width: 370,
                   child: TextFormField(
+                    controller: _nikController,
+                    decoration: InputDecoration(
+                      labelText: "NIK",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      suffixIcon: Icon(Icons.format_list_numbered),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your NIK';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(height: 10),
+                Container(
+                  width: 370,
+                  child: TextFormField(
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: "Password",
@@ -162,6 +185,37 @@ class _RegisterFormState extends State<RegisterForm> {
                       }
                       if (value != _passwordController.text) {
                         return 'Passwords do not match';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(height: 10),
+                Container(
+                  width: 370,
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedGender,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedGender = newValue;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Jenis Kelamin',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      suffixIcon: Icon(Icons.person_outline),
+                    ),
+                    items: _genderList.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Pilih jenis kelamin';
                       }
                       return null;
                     },
