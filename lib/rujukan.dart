@@ -17,7 +17,7 @@ class _rujukanFormState extends State<rujukanForm> {
   String? _selectedKelurahan;
 
   final List<String> _kecamatanList = ['Kecamatan Bandar Laksamana'];
-  final List<String> _kelurahanList = ['Kelurahan Parit 1 Api-Api', 'Temiang', 'Api-Api', 'Tenggayun', 'Sepahat', ];
+  final List<String> _kelurahanList = ['Kelurahan Parit 1 Api-Api', 'Temiang', 'Api-Api', 'Tenggayun', 'Sepahat', 'Bukit Kerikit', 'Tanjung Leban'];
 
   @override
   Widget build(BuildContext context) {
