@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:bandlaksehat_apps/rujukan.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,11 +19,10 @@ class _HomePageState extends State<HomePage> {
     if (index == 1) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => rujukanForm()), 
+        MaterialPageRoute(builder: (context) => rujukanForm()),
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             label: '',
           ),
         ],
-        selectedLabelStyle: TextStyle(color: Colors.blue), 
+        selectedLabelStyle: TextStyle(color: Colors.blue),
         unselectedLabelStyle: TextStyle(color: Colors.black),
       ),
     );
@@ -109,7 +110,53 @@ class UserInfo extends StatelessWidget {
   }
 }
 
-class WeatherInfo extends StatelessWidget {
+class WeatherInfo extends StatefulWidget {
+  @override
+  _WeatherInfoState createState() => _WeatherInfoState();
+}
+
+class _WeatherInfoState extends State<WeatherInfo> {
+  String suhu = '';
+  String kelembapan = '';
+  String uv = '';
+  String jarakPandang = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchWeatherData();
+  }
+
+  Future<void> fetchWeatherData() async {
+    String apiKey = '651bb4f7e3b355ec9a4605c63f495b07';
+    String city = 'Bengkalis';
+    String url = 'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&units=metric';
+
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        suhu = data['main']['temp'].toString();
+        kelembapan = data['main']['humidity'].toString();
+        jarakPandang = (data['visibility'] / 1000).toString(); // Convert visibility from meters to kilometers
+      });
+
+      // Fetch UV index separately
+      String lat = data['coord']['lat'].toString();
+      String lon = data['coord']['lon'].toString();
+      String uvUrl = 'https://api.openweathermap.org/data/2.5/uvi?lat=$lat&lon=$lon&appid=$apiKey';
+      final uvResponse = await http.get(Uri.parse(uvUrl));
+      if (uvResponse.statusCode == 200) {
+        final uvData = json.decode(uvResponse.body);
+        setState(() {
+          uv = uvData['value'].toString();
+        });
+      }
+    } else {
+      throw Exception('Failed to load weather data');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -136,22 +183,22 @@ class WeatherInfo extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Text(
-            'Suhu :',
+            'Suhu : $suhu°C',
             style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
           Text(
-            'Kelembapan :',
+            'Kelembapan : $kelembapan%',
             style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
           Text(
-            'UV :',
+            'UV : $uv',
             style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
           Text(
-            'Jarak Pandang :',
+            'Jarak Pandang : $jarakPandang km',
             style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
           ),
         ],
