@@ -30,7 +30,7 @@ class _RegisterFormState extends State<RegisterForm> {
       final gender = _selectedGender;
 
       final response = await http.post(
-        Uri.parse('http://your_api_url/api/register'),
+        Uri.parse('http://bandlaksehat.great-site.net//api/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'username': username,
