@@ -36,7 +36,7 @@ class _LoginScreen extends State<LoginScreen> {
       _isLoading = true;
     });
 
-    const url = 'https://presensi.spilme.id/login'; 
+    const url = 'http://bandlaksehat.great-site.net/api/login';
     final response = await http.post(
       Uri.parse(url),
       headers: {
@@ -47,31 +47,25 @@ class _LoginScreen extends State<LoginScreen> {
         'password': password,
       }),
     );
-    if (kDebugMode) {
-      print(response.statusCode);
-    }
+
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
       final nik = responseBody['nik'];
       final token = responseBody['token'];
-      final name = responseBody['nama'];
-      final dept = responseBody['departemen'];
-      final imgUrl = responseBody['imgUrl'];
+      final name = responseBody['name'];
+      final gender = responseBody['gender'];
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwt', token);
       await prefs.setString('name', name);
-      await prefs.setString('dept', dept);
-      await prefs.setString('imgProfil', imgUrl);
       await prefs.setString('nik', nik);
+      await prefs.setString('gender', gender);
 
-      // ignore: use_build_context_synchronously
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => Dashboard()),
         (route) => false,
       );
     } else {
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid username or password')),
       );
@@ -96,7 +90,6 @@ class _LoginScreen extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Logo aplikasi
                     Image.asset(
                       'assets/images/bandlaklogo.png',
                       height: 128,
@@ -143,10 +136,8 @@ class _LoginScreen extends State<LoginScreen> {
                           borderSide: BorderSide(color: Color(0xFF12A3DA)),
                         ),
                       ),
-                      // keyboardType: TextInputType.emailAddress,
                     ),
                     const SizedBox(height: 24),
-                    // Password TextField
                     TextField(
                       controller: _passwordController,
                       decoration: const InputDecoration(
@@ -164,7 +155,6 @@ class _LoginScreen extends State<LoginScreen> {
                       obscureText: true,
                     ),
                     const SizedBox(height: 8),
-                    // forgot password
                     GestureDetector(
                       onTap: () {
                         if (kDebugMode) {
@@ -183,7 +173,6 @@ class _LoginScreen extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    // Login Button
                     _isLoading
                         ? const CircularProgressIndicator()
                         : ElevatedButton(
@@ -203,10 +192,8 @@ class _LoginScreen extends State<LoginScreen> {
                             ),
                           ),
                     const SizedBox(height: 30),
-                    // Register New Account
                     GestureDetector(
                       onTap: () {
-                        // Navigasi ke halaman register
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => RegisterForm()),
