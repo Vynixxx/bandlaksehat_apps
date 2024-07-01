@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegisterForm extends StatefulWidget {
   @override
@@ -10,21 +12,48 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  final TextEditingController _nikController = TextEditingController(); 
-  String? _selectedGender; 
+  final TextEditingController _nikController = TextEditingController();
+  String? _selectedGender;
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   final _formKey = GlobalKey<FormState>();
 
-  final List<String> _genderList = ['Laki-laki', 'Perempuan']; 
+  final List<String> _genderList = ['Laki-laki', 'Perempuan'];
 
-  void _register() {
+  Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
-      // Logika untuk melakukan registrasi
-      // Setelah registrasi berhasil, arahkan ke halaman login
-      Navigator.pushReplacementNamed(context, '/login');
+      final username = _usernameController.text;
+      final email = _emailController.text;
+      final password = _passwordController.text;
+      final confirmPassword = _confirmPasswordController.text;
+      final nik = _nikController.text;
+      final gender = _selectedGender;
+
+      final response = await http.post(
+        Uri.parse('http://your_api_url/api/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': username,
+          'email': email,
+          'password': password,
+          'password_confirmation': confirmPassword,
+          'nik': nik,
+          'gender': gender,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        Navigator.pushReplacementNamed(context, '/login');
+      } else {
+        // Handle error response
+        final responseBody = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(responseBody['message'] ?? 'Registration failed')),
+        );
+      }
     }
   }
+
 
   void _navigateToLogin() {
     Navigator.pushNamed(context, '/login');
